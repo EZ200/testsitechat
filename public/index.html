@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOCKET.IO CHAT</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="messages">
+        <form action="">
+            <input id="msg" autocomplete="off"/><button>Envoyer</button>
+        </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(function(){
+
+            var socket = io();
+            
+            $("form").submit(function(e){
+                e.preventDefault();
+
+                socket.emit("chat message", $("#msg").val());
+                $("#msg").val("")
+
+                return false;
+            });
+            var d = new Date();
+            var date = d.getHours()+":"+d.getMinutes();
+
+
+            socket.on('chat message', function(msg) {
+               $("#messages").append($("<p>").text("Aujourd'hui à " + date + "\n" + msg)); 
+            });
+        });
+    </script>
+</body>
+</html>
